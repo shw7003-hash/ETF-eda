@@ -1,5 +1,6 @@
 import { MARKETS, MANAGERS, PRODUCTS, COLORS, normalize, sum, mean, groups, filterRows, sortRows, fmt, pct, cap, tone, csv } from './domain.js';
 const $=id=>document.getElementById(id);
+const API_URL=document.querySelector('meta[name="etf-api"]')?.content||'/api/etfs';
 const escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function loadFavorites(){try{const v=JSON.parse(localStorage.getItem('etf-atlas-favorites')||'[]');return new Set(Array.isArray(v)?v.filter(x=>typeof x==='string'):[]);}catch{return new Set();}}
 const state={rows:[],query:'',manager:'',market:'',product:'',favoritesOnly:false,favorites:loadFavorites(),compare:new Set(),view:'overview',sort:'marketSum',dir:'desc',page:1,size:20,interval:60,remaining:60,fetchedAt:null,busy:false,stale:false};
@@ -24,7 +25,7 @@ function updateStatus(){
 async function refresh(manual=false){
   if(state.busy)return;state.busy=true;$('refresh').disabled=true;$('refresh-icon').classList.add('spinning');
   try{
-    const res=await fetch('/api/etfs',{cache:'no-store',signal:AbortSignal.timeout(22000)});
+    const res=await fetch(API_URL,{cache:'no-store',credentials:'omit',signal:AbortSignal.timeout(22000)});
     if(!res.ok)throw new Error('HTTP '+res.status);
     const data=await res.json();
     if(!Array.isArray(data.items)||!data.items.length||!data.fetchedAt)throw new Error('Invalid data');

@@ -57,6 +57,19 @@ API는 실제 거래시각을 제공하지 않습니다. 화면의 수신시각�
 
 ## 배포
 
-`.openai/hosting.json`은 이 프로젝트의 비공개 사이트 식별자를 담습니다. `npm run build` 후 `dist/server/index.js`를 실행 가능한 Worker 환경에 배포할 수 있습니다. API와 정적 페이지를 한 서버에서 제공해야 합니다. 인증 토큰·비밀번호는 소스에 포함하지 않습니다.
+`.openai/hosting.json`은 기존 데이터 서버 사이트의 식별자를 담습니다. `npm run build` 후 `dist/server/index.js`를 실행 가능한 Worker 환경에 배포할 수 있습니다. API와 정적 페이지를 한 서버에서 제공해야 합니다. 인증 토큰·비밀번호는 소스에 포함하지 않습니다.
 
 관심 목록은 로컬 브라우저 저장소에만 저장되며 서버 사용자 데이터베이스를 사용하지 않습니다. 공식 네이버 서비스가 아니며, API 제공 방식 변경이나 제한 시 연결을 점검해야 합니다.
+
+
+## GitHub Pages
+
+공개 대시보드의 배포 대상 주소는 `https://shw7003-hash.github.io/ETF-eda/dashboard.html`입니다. GitHub Pages 설정이 저장되어 배포가 완료된 후에 이 주소를 이용할 수 있습니다.
+
+1. 저장소 **Settings → Pages**에서 **Source: Deploy from a branch**를 선택합니다.
+2. **Branch: main**, **Folder: /docs**를 선택하고 **Save**를 누릅니다.
+3. GitHub의 Pages 배포 완료를 확인합니다.
+
+`npm run build:pages`는 `public/`의 화면을 `docs/`로 복사하고 API 주소를 기존 공개 데이터 서버로 지정합니다. `docs/dashboard.html`과 `docs/index.html`은 같은 대시보드를 제공합니다. 상대 경로를 사용하므로 저장소 하위 URL에서도 CSS와 JavaScript가 정상 로드됩니다. 변경 후에는 `docs/` 결과물도 함께 커밋해야 합니다.
+
+GitHub Pages는 서버 코드를 실행하지 않습니다. 따라서 네이버 EUC-KR 응답의 변환과 20초 캐시는 기존 공개 Worker의 `/api/etfs`에서 계속 처리합니다. 이 API는 `https://shw7003-hash.github.io` 출처의 읽기 요청에 CORS 응답을 제공하며 로그인 토큰을 브라우저에 넣지 않습니다. 기존 데이터 서버를 삭제하거나 비공개로 바꾸면 GitHub Pages의 실시간 조회도 중단됩니다. 관심 목록은 사이트 주소별 브라우저 저장소에 저장되므로 기존 주소의 관심 목록이 새 주소로 자동 이전되지는 않습니다.

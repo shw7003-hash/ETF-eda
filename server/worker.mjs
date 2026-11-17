@@ -5,6 +5,14 @@ export default {
   async fetch(request) {
     const url = new URL(request.url);
     const headers = { 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'strict-origin-when-cross-origin' };
+    if (url.pathname === '/api/etfs') {
+      headers.Vary = 'Origin';
+      if (request.headers.get('Origin') === 'https://shw7003-hash.github.io') {
+        headers['Access-Control-Allow-Origin'] = 'https://shw7003-hash.github.io';
+        headers['Access-Control-Allow-Methods'] = 'GET, HEAD, OPTIONS';
+      }
+      if (request.method === 'OPTIONS') return new Response(null,{status:204,headers});
+    }
     if (!['GET','HEAD'].includes(request.method)) return new Response('Method not allowed', {status:405,headers:{...headers,Allow:'GET, HEAD'}});
     if (url.pathname === '/api/etfs') {
       try {

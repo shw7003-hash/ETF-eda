@@ -1,5 +1,5 @@
 {
   "name": "etf-atlas", "version": "1.0.0", "private": true, "type": "module",
-  "scripts": {"dev":"node --use-env-proxy scripts/dev.mjs", "start":"node --use-env-proxy scripts/dev.mjs", "build":"node scripts/build.mjs", "test":"node --test tests/*.test.mjs"},
+  "scripts": {"dev":"node --use-env-proxy scripts/dev.mjs", "start":"node --use-env-proxy scripts/dev.mjs", "build":"node scripts/build-pages.mjs && node scripts/build.mjs", "build:pages":"node scripts/build-pages.mjs", "test":"node scripts/build-pages.mjs && node scripts/build.mjs && node --test tests/*.test.mjs"},
   "engines":{"node":">=24"}
 }
